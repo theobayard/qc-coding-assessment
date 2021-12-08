@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Invoke code with input
+./dist/index.js $@
