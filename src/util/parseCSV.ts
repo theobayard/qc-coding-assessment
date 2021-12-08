@@ -1,8 +1,10 @@
+import { assert } from 'chai';
 import { readFile } from 'fs/promises';
 
 /**
  * An interface for defining how to parse csv rows.
  * Each value in the row will be parsed by it's corresponding function.
+ * This interface describes one row, so it will have an entry for every column
  */
 interface RowDefinition {
     [key:string]: (value:string)=>any
@@ -19,16 +21,37 @@ interface RowDefinition {
 const parseCSV = async (rowDef:RowDefinition, csvFilePath:string) => {
     const fileString = await readFile(csvFilePath,"utf-8");
 
-    console.log(`fileString:${fileString}`)
     // convert to 2d array of form [row][column] 
-    const fileArray = fileString.split("\n")
+    let fileArray = fileString.split("\n")
                                 .map((row) => row.split(","));
 
-    // validate and remove header
-    const header = fileArray[0];
-    
+    // separate header
+    const header = fileArray[0]
+    fileArray = fileArray.slice(1)
 
-    return fileArray
+    /**
+     * Validate Header
+     * A mismatch between csv columns and the parser definition
+     * is an easy mistake that could cause non-obvious problems.
+     * Better to catch it early.
+     */
+    const headerIterator = header.values()
+    for(const key in rowDef) {
+        assert(key==headerIterator.next().value,"CSV header does not match rowDef")
+    }
+
+    // define transformation to row entries
+    const rowMap = (row:string[]) => {
+        const rowIterator = row.values()
+        // apply transformation to each row entry
+        let parsedRow:any = {}
+        for(const key in rowDef) {
+            parsedRow.key = rowDef[key](rowIterator.next().value)
+        }
+    }
+
+    // apply transformation to every row
+    return fileArray.map(rowMap)
 }
 
 export default parseCSV
