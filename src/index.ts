@@ -1,14 +1,17 @@
 #!/usr/bin/env node
 import parseArgs from "./parseArgs"
+import parseCookieCSV from "./parseCookieCSV";
+import { isolateUTCDay } from "./util/filterFuncs";
 
-function main() {
+async function main() {
     // Get command line arguments
     const parsedArgs = parseArgs()
 
-    // parse file
-    
+    // parse cookie file
+    const cookieData = await parseCookieCSV(parsedArgs.filePath)
 
     // isolate day
+    const dataFromDay = isolateUTCDay(parsedArgs.date,cookieData)
 
     // find most common cookie
 
