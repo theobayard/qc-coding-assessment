@@ -9,6 +9,9 @@ import { readFile } from 'fs/promises';
 interface RowDefinition {
     [key:string]: (value:string)=>any
 }
+type RowType<T extends RowDefinition> = {
+    [Property in keyof T]:ReturnType<T[Property]>
+}
 
 /**
  * Creates a function that will parse csv files.
@@ -18,12 +21,16 @@ interface RowDefinition {
  * 
  * @returns an array of objects with a member variable for every column
  */
-const parseCSV = async (rowDef:RowDefinition, csvFilePath:string) => {
-    const fileString = await readFile(csvFilePath,"utf-8");
+async function parseCSV<R extends RowDefinition>(rowDef:R, csvFilePath:string):Promise<RowType<R>[]> {
+    const fileString = await readFile(csvFilePath,"utf-8").then((fString)=>{
+        //remove carriage returns (booo windows)
+        return fString.replace("\r","");
+    });
+
 
     // convert to 2d array of form [row][column] 
     let fileArray = fileString.split("\n")
-                                .map((row) => row.split(","));
+                              .map((row) => row.split(","));
 
     // separate header
     const header = fileArray[0]
@@ -46,8 +53,9 @@ const parseCSV = async (rowDef:RowDefinition, csvFilePath:string) => {
         // apply transformation to each row entry
         let parsedRow:any = {}
         for(const key in rowDef) {
-            parsedRow.key = rowDef[key](rowIterator.next().value)
+            parsedRow[key] = rowDef[key](rowIterator.next().value)
         }
+        return parsedRow as RowType<R>
     }
 
     // apply transformation to every row

@@ -6,10 +6,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const parseArgs_1 = __importDefault(require("./parseArgs"));
 function main() {
+    // Get command line arguments
+    const parsedArgs = (0, parseArgs_1.default)();
     // parse file
     // isolate day
     // find most common cookie
-    console.log(parseArgs_1.default);
+    console.log(process.argv);
 }
 main();
 // Support require style import for command line file

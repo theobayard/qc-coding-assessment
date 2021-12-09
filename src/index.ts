@@ -1,15 +1,18 @@
 #!/usr/bin/env node
-import parsedArgs from "./util/parseArgs"
+import parseArgs from "./parseArgs"
 
 function main() {
-    // parse file
+    // Get command line arguments
+    const parsedArgs = parseArgs()
 
+    // parse file
+    
 
     // isolate day
 
     // find most common cookie
 
-    console.log(parsedArgs);
+    console.log(process.argv);
 }
 
 main()
