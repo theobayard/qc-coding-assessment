@@ -3,16 +3,22 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/index.ts",
-  "bin": "src/index.ts",
+  "bin": "dist/index.js",
   "pkg": {
     "targets": [
-      "node16-macos-x64"
-    ]
+      "node16-macos-x64",
+      "node16-linux-x64",
+      "node16-win-x64"
+    ],
+    "output":"most_active_cookie",
+    "outputPath": "bytecode_dist"
   },
   "scripts": {
     "test": "mocha -r ts-node/register \"src/test/**/*.spec.ts\"",
     "build:fresh": "npm exec tsc && chmod +x ./dist/index.js",
-    "build": "rm -r ./dist && npm exec tsc && chmod +x ./dist/index.js"
+    "build": "rm -r ./dist && npm exec tsc && chmod +x ./dist/index.js",
+    "build:bytecode": "npm run build && pkg .",
+    "build:bytecode:for": "npm run build && pkg . --targets"
   },
   "repository": {
     "type": "git",
