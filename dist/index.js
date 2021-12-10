@@ -15,6 +15,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const getMostCommonCookies_1 = __importDefault(require("./getMostCommonCookies"));
 const parseArgs_1 = __importDefault(require("./parseArgs"));
+/**
+ * This program will return the most common cookie from a csv file of the form cookie,timestamp
+ * on a given day.
+ */
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         // Get command line arguments
