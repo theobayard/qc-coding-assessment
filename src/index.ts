@@ -2,6 +2,10 @@
 import getMostCommonCookies from "./getMostCommonCookies";
 import parseArgs from "./parseArgs"
 
+/**
+ * This program will return the most common cookie from a csv file of the form cookie,timestamp
+ * on a given day.
+ */
 async function main() {
     // Get command line arguments
     const parsedArgs = parseArgs()
