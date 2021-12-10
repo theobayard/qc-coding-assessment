@@ -19,35 +19,40 @@ const promises_1 = require("fs/promises");
  *
  * @returns an array of objects with a member variable for every column
  */
-const parseCSV = (rowDef, csvFilePath) => __awaiter(void 0, void 0, void 0, function* () {
-    const fileString = yield (0, promises_1.readFile)(csvFilePath, "utf-8");
-    // convert to 2d array of form [row][column] 
-    let fileArray = fileString.split("\n")
-        .map((row) => row.split(","));
-    // separate header
-    const header = fileArray[0];
-    fileArray = fileArray.slice(1);
-    /**
-     * Validate Header
-     * A mismatch between csv columns and the parser definition
-     * is an easy mistake that could cause non-obvious problems.
-     * Better to catch it early.
-     */
-    const headerIterator = header.values();
-    for (const key in rowDef) {
-        (0, chai_1.assert)(key == headerIterator.next().value, "CSV header does not match rowDef");
-    }
-    // define transformation to row entries
-    const rowMap = (row) => {
-        const rowIterator = row.values();
-        // apply transformation to each row entry
-        let parsedRow = {};
+function parseCSV(rowDef, csvFilePath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const fileString = yield (0, promises_1.readFile)(csvFilePath, "utf-8").then((fString) => {
+            //remove carriage returns (booo windows)
+            return fString.replace("\r", "");
+        }).catch((err) => { throw (err); });
+        // convert to 2d array of form [row][column] 
+        let fileArray = fileString.split("\n")
+            .map((row) => row.split(","));
+        // separate header
+        const header = fileArray[0];
+        fileArray = fileArray.slice(1);
+        /**
+         * Validate Header
+         * A mismatch between csv columns and the parser definition
+         * is an easy mistake that could cause non-obvious problems.
+         * Better to catch it early.
+         */
+        const headerIterator = header.values();
         for (const key in rowDef) {
-            parsedRow[key] = rowDef[key](rowIterator.next().value);
+            (0, chai_1.assert)(key == headerIterator.next().value, "CSV header does not match rowDef");
         }
-        return parsedRow;
-    };
-    // apply transformation to every row
-    return fileArray.map(rowMap);
-});
+        // define transformation to row entries
+        const rowMap = (row) => {
+            const rowIterator = row.values();
+            // apply transformation to each row entry
+            let parsedRow = {};
+            for (const key in rowDef) {
+                parsedRow[key] = rowDef[key](rowIterator.next().value);
+            }
+            return parsedRow;
+        };
+        // apply transformation to every row
+        return fileArray.map(rowMap);
+    });
+}
 exports.default = parseCSV;

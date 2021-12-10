@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.simpleCookie1CSVPath = exports.givenCSVPath = exports.carriageReturnsCSVPath = exports.tenKRowsCSVPath = exports.simple1CSVPath = exports.justHeaderCSVPath = exports.emptyCSVPath = void 0;
+exports.emptyCSVPath = "./src/test/testInputs/empty.csv";
+exports.justHeaderCSVPath = "./src/test/testInputs/justHeader.csv";
+exports.simple1CSVPath = "./src/test/testInputs/simple1.csv";
+exports.tenKRowsCSVPath = "./src/test/testInputs/10000x.csv";
+exports.carriageReturnsCSVPath = "./src/test/testInputs/carriageReturns.csv";
+exports.givenCSVPath = "./src/test/testInputs/given.csv";
+exports.simpleCookie1CSVPath = "./src/test/testInputs/simpleCookie1.csv";

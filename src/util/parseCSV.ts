@@ -25,7 +25,7 @@ async function parseCSV<R extends RowDefinition>(rowDef:R, csvFilePath:string):P
     const fileString = await readFile(csvFilePath,"utf-8").then((fString)=>{
         //remove carriage returns (booo windows)
         return fString.replace("\r","");
-    });
+    }).catch((err)=>{throw(err)});
 
 
     // convert to 2d array of form [row][column] 

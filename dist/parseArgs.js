@@ -6,7 +6,11 @@ const ts_command_line_args_1 = require("ts-command-line-args");
  * Basic string -> date function
  */
 function parseDate(value) {
-    return value ? new Date(Date.parse(value)) : undefined;
+    const date = new Date(Date.parse(value));
+    // Verify date is valid
+    if (isNaN(date.getTime()))
+        throw ("Invalid date argument given");
+    return date;
 }
 exports.parseConfig = {
     date: {
